@@ -145,6 +145,14 @@ lakkireddy@Vasunders-Mac-mini ~ % docker run -d \
 > mongo-express
 d989ce390ea322f740c296daf33fefb184af7e1c9b8c3d523da672fc00ce3706
 
+docker-compose 
+
+To bring up in detached mode : docker-compose -f docker-compose.yaml up -d 
+
+To bring done : docker-compose -f docker-compose.yaml down 
+
+NOTE :: No need to specify the network in docker-compose file as all containers created from a docker-compose are created under a new network thats created automatically. 
+
 
 
 
