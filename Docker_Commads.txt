@@ -1,0 +1,161 @@
+Pull Images ::
+  --> docker pull <imagename>  (Pulls image from dockerHub) 
+ —> docker pull <imagename>:Version (Pulls a particular version from docker hub) 
+  —> docker images (Lists all the images on the local) 
+  —> docker rmi <Imagename> (To delete or clean up images and can only be done after the container for this image is removed and can’t delete even if container deployed and in stop state)
+ 
+Run the Container
+  —> docker run <imagename> (Pulls and Starts the container) 
+  —> docker run <imagename>:version (Pulls and Starts the container with that version) 
+      NOTE :: run checks the images on the local and if they are not preset, will pull them from docker hub and runs the container env of the image
+      NOTE :: Above cmds always bring up the container in an attached mode and when we quit the session, container stop. If we want to bring up a container in detached mode, plz use the below cmd. 
+   —> docker run -d <imagename>:version (start using detached mode)
+   —> docker run  -p<LocalhostPort>: <containerport>  <imagename>:<version>  (Binding :: Local Port to container Port, We can have different Local port binding to same container port if the same container is running multiple times as each act independntly)
+   —> docker run -d --name your_imagename <imagename> (Every time a container is created is assigns a unique Container ID and a name and this cmd let you laugh a Container with your own name ) 
+
+   --> docker ps (Lists running containers)
+  —> docker ps -a (Lists all containers(even the one’s that are not running or stopped)) 
+   —> docker stop <Container ID> or <Name>  (Start container)
+   —> docker start <Container ID> or <Name>  (Stop Container)
+   —> docker rm <Container ID> or <Name>  (Remove or Delete container)8080
+   —> docker logs <Container ID> or <Name> (Check logs on the container)
+
+lakkireddy@Vasunders-Mac-mini ~ % docker run -d --name first-redis -p6000:6379 redis:6.0
+Unable to find image 'redis:6.0' locally
+6.0: Pulling from library/redis
+6fcf2156bc23: Pull complete 
+015d746ef72f: Pull complete 
+67d4bab7e6e7: Pull complete 
+1595125d2067: Pull complete 
+8a70b1d02e60: Pull complete 
+742bd1e7e8ad: Pull complete 
+Digest: sha256:41d45d9536dd233d355891ac5a2382ff03286624911a5922c0953c01ec7efe3e
+Status: Downloaded newer image for redis:6.0
+5cd6382d0ec64dd0c700550132be5a70d2bfc582ae8d9f7054f9b11f14ecbee2
+lakkireddy@Vasunders-Mac-mini ~ % docker images
+REPOSITORY   TAG       IMAGE ID       CREATED      SIZE
+redis        6.0       de1a41db2ad8   7 days ago   98.6MB
+lakkireddy@Vasunders-Mac-mini ~ % docker ps
+CONTAINER ID   IMAGE       COMMAND                  CREATED          STATUS          PORTS                    NAMES
+5cd6382d0ec6   redis:6.0   "docker-entrypoint.s…"   31 seconds ago   Up 31 seconds   0.0.0.0:6000->6379/tcp   first-redis
+lakkireddy@Vasunders-Mac-mini ~ % docker stop 5cd6382d0ec6
+5cd6382d0ec6
+lakkireddy@Vasunders-Mac-mini ~ % docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+lakkireddy@Vasunders-Mac-mini ~ % docker ps -a
+CONTAINER ID   IMAGE       COMMAND                  CREATED              STATUS                     PORTS     NAMES
+5cd6382d0ec6   redis:6.0   "docker-entrypoint.s…"   About a minute ago   Exited (0) 9 seconds ago             first-redis
+lakkireddy@Vasunders-Mac-mini ~ % docker start first-redis
+first-redis
+lakkireddy@Vasunders-Mac-mini ~ % docker ps
+CONTAINER ID   IMAGE       COMMAND                  CREATED         STATUS         PORTS                    NAMES
+5cd6382d0ec6   redis:6.0   "docker-entrypoint.s…"   2 minutes ago   Up 3 seconds   0.0.0.0:6000->6379/tcp   first-redis
+lakkireddy@Vasunders-Mac-mini ~ % docker logs 5cd6382d0ec6
+1:C 07 Apr 2021 16:24:16.291 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 07 Apr 2021 16:24:16.291 # Redis version=6.0.12, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 07 Apr 2021 16:24:16.291 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1:M 07 Apr 2021 16:24:16.292 * Running mode=standalone, port=6379.
+1:M 07 Apr 2021 16:24:16.292 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+1:M 07 Apr 2021 16:24:16.292 # Server initialized
+1:M 07 Apr 2021 16:24:16.293 * Ready to accept connections
+1:signal-handler (1617812733) Received SIGTERM scheduling shutdown...
+1:M 07 Apr 2021 16:25:33.845 # User requested shutdown...
+1:M 07 Apr 2021 16:25:33.845 * Saving the final RDB snapshot before exiting.
+1:M 07 Apr 2021 16:25:33.847 * DB saved on disk
+1:M 07 Apr 2021 16:25:33.847 # Redis is now ready to exit, bye bye...
+1:C 07 Apr 2021 16:26:13.706 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 07 Apr 2021 16:26:13.706 # Redis version=6.0.12, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 07 Apr 2021 16:26:13.706 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+1:M 07 Apr 2021 16:26:13.707 * Running mode=standalone, port=6379.
+1:M 07 Apr 2021 16:26:13.707 # WARNING: The TCP backlog setting of 511 cannot be enforced because /proc/sys/net/core/somaxconn is set to the lower value of 128.
+1:M 07 Apr 2021 16:26:13.707 # Server initialized
+1:M 07 Apr 2021 16:26:13.708 * Loading RDB produced by version 6.0.12
+1:M 07 Apr 2021 16:26:13.708 * RDB age 40 seconds
+1:M 07 Apr 2021 16:26:13.708 * RDB memory usage when created 0.80 Mb
+1:M 07 Apr 2021 16:26:13.708 * DB loaded from disk: 0.000 seconds
+1:M 07 Apr 2021 16:26:13.708 * Ready to accept connections
+
+Get into Container Virtual machine  
+
+lakkireddy@Vasunders-Mac-mini ~ % docker ps
+CONTAINER ID   IMAGE       COMMAND                  CREATED          STATUS          PORTS                    NAMES
+5cd6382d0ec6   redis:6.0   "docker-entrypoint.s…"   44 minutes ago   Up 42 minutes   0.0.0.0:6000->6379/tcp   first-redis
+
+ —> docker exec -it <Container ID> or <Name>  /bin/bash (Get the terminal of a running container) (try /bin/ssh if /bin/bash does not work)
+  Terminal will change from  lakkireddy@Vasunders-Mac-mini(Local) to root@5cd6382d0ec6 (container ID name)
+
+lakkireddy@Vasunders-Mac-mini ~ % docker exec -it 5cd6382d0ec6 /bin/bash 
+
+All basic Linux cmd will work on the container terminal but complex cmds like CURL may not work in all containers as the containers are built on light weight Linux OS like alpine as an example.  
+
+root@5cd6382d0ec6:/data# ls -ltr
+total 4
+-rw-r--r-- 1 redis redis 93 Apr  7 16:25 dump.rdb
+root@5cd6382d0ec6:/data# pwd
+/data
+root@5cd6382d0ec6:/data# env
+HOSTNAME=5cd6382d0ec6
+REDIS_DOWNLOAD_SHA=f16ad973d19f80f121e53794d5eb48a997e2c6a85b5be41bb3b66750cc17bf6b
+PWD=/data
+HOME=/root
+REDIS_VERSION=6.0.12
+GOSU_VERSION=1.12
+TERM=xterm
+REDIS_DOWNLOAD_URL=http://download.redis.io/releases/redis-6.0.12.tar.gz
+SHLVL=1
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+_=/usr/bin/env
+
+Exit will bring us back to the local terminal as show below. 
+root@5cd6382d0ec6:/data# exit
+exit
+lakkireddy@Vasunders-Mac-mini ~ % 
+
+
+Docker Docker network delete docker runDocker Network :: 
+
+ —>  docker network ls (List docker network)
+ —>  docker network create <network-name> (creates a network with name <network-name>)
+
+Creating Mongo-Network 
+
+lakkireddy@Vasunders-Mac-mini ~ % docker network create mongo-network
+01dec96b68102a629d58da325ae2e56560b372281076171bbdee89edc4b60184
+
+Running MongoDB with Options mongo
+
+lakkireddy@Vasunders-Mac-mini ~ % docker run -d \
+> -p 27017:27017 \
+> -e MONGO_INITDB_ROOT_USERNAME=admin \
+> -e MONGO_INITDB_ROOT_PASSWORD=password \
+> --name mongodb \
+> --network mongo-network \
+> mongo
+bb46da4537692f20452b74989e90bf3fdab027508300dfd5a859b672256e5be7
+
+Running Mongo-Express with Options mongo
+
+lakkireddy@Vasunders-Mac-mini ~ % docker run -d \
+> -p 8081:8081 \
+> -e ME_CONFIG_MONGODB_ADMINUSERNAME=admin \
+> -e ME_CONFIG_MONGODB_ADMINPASSWORD=password \
+> --name mongo-express \
+> --network mongo-network \
+> -e ME_CONFIG_MONGODB_SERVER=mongodb \
+> mongo-express
+d989ce390ea322f740c296daf33fefb184af7e1c9b8c3d523da672fc00ce3706
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
